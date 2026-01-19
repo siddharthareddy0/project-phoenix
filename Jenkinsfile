@@ -5,16 +5,16 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out code from GitHub'
+                echo 'Checking out source code from GitHub'
                 checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Validating HTML file existence'
+                echo 'Checking if education.html exists'
                 bat '''
-                if not exist education.html (
+                if not exist Page\\education.html (
                     echo education.html NOT FOUND
                     exit /b 1
                 )
@@ -24,9 +24,9 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Running basic HTML validation'
+                echo 'Validating HTML structure'
                 bat '''
-                findstr /i "<html" education.html || exit /b 1
+                findstr /i "<html" Page\\education.html || exit /b 1
                 '''
             }
         }
