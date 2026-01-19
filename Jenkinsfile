@@ -14,8 +14,8 @@ pipeline {
             steps {
                 echo 'Validating HTML file existence'
                 sh '''
-                  if [ ! -f Page/education.html ]; then
-                    echo "education.html NOT FOUND in Page folder"
+                  if [ ! -f education.html ]; then
+                    echo "education.html NOT FOUND"
                     exit 1
                   fi
                 '''
@@ -26,14 +26,14 @@ pipeline {
             steps {
                 echo 'Running basic HTML validation'
                 sh '''
-                  grep -i "<html" Page/education.html || exit 1
+                  grep -i "<html" education.html || exit 1
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying Page folder (simulation)'
+                echo 'Deploying education.html (simulation)'
                 echo 'HTML page deployed successfully'
             }
         }
