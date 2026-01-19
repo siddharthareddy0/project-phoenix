@@ -5,46 +5,49 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out source code from GitHub'
+                echo 'Checking out source code'
                 checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Checking if education.html exists'
+                echo 'Build validation: file existence'
                 bat '''
                 if not exist Page\\education.html (
-                    echo education.html NOT FOUND
+                    echo ERROR: education.html not found
                     exit /b 1
                 )
                 '''
             }
         }
 
-        stage('Test') {
+        stage('QA - HTML Structure') {
             steps {
-                echo 'Validating HTML structure'
+                echo 'Running HTML quality checks'
                 bat '''
                 findstr /i "<html" Page\\education.html || exit /b 1
+                findstr /i "<head" Page\\education.html || exit /b 1
+                findstr /i "<body" Page\\education.html || exit /b 1
+                findstr /i "<title" Page\\education.html || exit /b 1
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying education.html (simulation)'
-                echo 'HTML page deployed successfully'
+                echo 'Deploying HTML page (simulation)'
+                echo 'Deployment successful'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully'
+            echo 'QUALITY GATE PASSED – Pipeline successful'
         }
         failure {
-            echo 'Pipeline failed'
+            echo 'QUALITY GATE FAILED – Fix issues before deploy'
         }
     }
 }
