@@ -13,11 +13,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Validating HTML file existence'
-                sh '''
-                  if [ ! -f education.html ]; then
-                    echo "education.html NOT FOUND"
-                    exit 1
-                  fi
+                bat '''
+                if not exist education.html (
+                    echo education.html NOT FOUND
+                    exit /b 1
+                )
                 '''
             }
         }
@@ -25,8 +25,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running basic HTML validation'
-                sh '''
-                  grep -i "<html" education.html || exit 1
+                bat '''
+                findstr /i "<html" education.html || exit /b 1
                 '''
             }
         }
